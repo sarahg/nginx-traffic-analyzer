@@ -1,6 +1,7 @@
 <?php
 
-// Make sure we know how to run this report.
+// Load static attributes for this report. 
+// Bail if we can't find any.
 $report = reportAttributes($_GET['type']);
 if (!is_array($report)) {
   echo('Error :(');
@@ -16,12 +17,13 @@ build($report);
 
 /**
  * Parse our logs and output HTML.
+ * @param $report Array of report attributes
+ * @return void
+ *   Echos HTML back to index.php.
  */
 function build($report) {
-  // Run a shell command to parse the logs.
   $str = shell_exec($report['command']);
   $results = preg_split("#[\r\n]+#", $str);
-  // Return HTML.
   echo buildResultPanel($report, $results);
 }
 
@@ -55,7 +57,6 @@ function buildTableRow($type, $result) {
 
 /**
  * How do we feel about this user agent?
- * 
  * @param $agent string
  * @return string
  */
@@ -95,6 +96,7 @@ function reportAttributes($type) {
  * @param array $results
  * @return string $markup
  *   An HTML table of results (╯°□°)╯︵ ┻━┻
+ *   and a dynamic IP blocking code snippet for the IP report.
  */
 function buildResultPanel($report, $results) {
   $markup = '<table>';
@@ -117,15 +119,16 @@ function buildResultPanel($report, $results) {
  * Returns markup for the IP Block code snippet.
  */
 function IPBlockCodeSnippet() {
-  $markup  = '<div class="block-snippet invisible">';
-  $markup .= '<p class="mt-5">Select IPs to generate blocking code</p>';
-
-  // @todo show when boxes are checked; populate array() with checked item values
-  $markup .= '<pre>';
-  $markup .= htmlspecialchars('$deny = array(); if (in_array ($_SERVER["REMOTE_ADDR"], $deny)) { die("Forbiden"); }');
+  $markup  = '<div class="block-snippet mt-8">';
+  $markup .= '<h3 class="text-xl">Block IPs</h3>';
+  $markup .= '<p class="mt-1">Select IPs above to generate PHP code.</p>';
+  $markup .= '<pre class="invisible mt-3 border p-3">';
+  $markup .= '$deny = array(<span id="blockIPs"></span>);' . "\n";
+  $markup .= 'if (in_array ($_SERVER["REMOTE_ADDR"], $deny)) {' . "\n";
+  $markup .= '  die("Forbiden");' . "\n";
+  $markup .= '}';
   $markup .= '</pre>';
-  $markup .= '<p><a href="inc/help.php#what">What do I do with this?</a></p>'; //@todo build help.php
-
+  //$markup .= '<p><a href="inc/help.php#what">What do I do with this?</a></p>'; //@todo build help.php
   $markup .= '</div>';
   return $markup;
 }

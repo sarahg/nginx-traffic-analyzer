@@ -18,7 +18,7 @@ const runReport = type => {
   xmlhttp.onreadystatechange = function() {
     if (this.readyState === 4 && this.status === 200) {
       box.innerHTML = this.responseText;
-      updateIPBlockCode();
+      updateIPBlockCode(); // start listening for checkbox clicks
     } else {
       box.innerHTML = "Error :(";
     }
@@ -30,16 +30,16 @@ const runReport = type => {
  * Update the "Block IPs" code snippet based on
  * values marked in the checkboxes.
  */
-const updateIPBlockCode = () => {
-  const element = document.querySelectorAll("td.checkbox");
-  let selected = [];
-  element.forEach(function(el) {
+const updateIPBlockCode = () => {  
+  document.querySelectorAll('td input').forEach(function(el) {
     el.addEventListener('click', ()=> {
-      console.log('click');
-      // @todo get values of all checked boxes
-      // add that to the PHP code snippet
-      // and show the code snippet box
-      // hide if no boxes checked
+      let selected = [];
+      let boxes = document.querySelectorAll(':checked');
+      boxes.forEach(function(box) {
+        selected.push('"' + box.value + '"');
+      });
+      document.getElementById('blockIPs').innerHTML = selected.toString();
+      document.querySelector('pre').classList.toggle('invisible', !boxes.length);
     });
   });
 }
