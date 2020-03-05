@@ -42,18 +42,19 @@
                 style="opacity: 50%;"
                 class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 id="path" type="text" disabled value="<?php echo getcwd() . '/'; ?>logs" />
+                <!-- @todo ^ alert if this directory is empty -->
             </div>
             <div class="flex items-center justify-start">
               <button
                 class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mr-2 rounded focus:outline-none focus:shadow-outline"
                 type="button"
-                onclick="runReport('ip-list')">
+                onclick="runReport('ip')">
                 Analyze IPs
               </button>
               <button
                 class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mr-2 rounded focus:outline-none focus:shadow-outline"
                 type="button"
-                onclick="runReport('ua-list')">
+                onclick="runReport('ua')">
                 Analyze User Agents
               </button>
               <button 
@@ -68,29 +69,29 @@
         </div>
 
         <!-- IP box -->
-        <div class="w-full md:w-1/2 p-3">
+        <div class="w-full md:w-1/2">
           <div class="bg-white border rounded shadow">
             <div class="border-b p-3">
               <h5 class="font-bold uppercase text-gray-600">Top IPs</h5>
             </div>
-            <div class="p-5" id="ip-list"><p>Click <em>Analyze IPs</em> to run this report.</p></div>
+            <div class="p-5" id="ip"><p>Click <em>Analyze IPs</em> to run this report.</p></div>
           </div>
         </div>
 
         <!-- UA box -->
-        <div class="w-full md:w-1/2 p-3">
+        <div class="w-full md:w-1/2 pl-6">
           <div class="bg-white border rounded shadow">
             <div class="border-b p-3">
               <h5 class="font-bold uppercase text-gray-600">
                 Top User Agents
               </h5>
             </div>
-            <div class="p-5" id="ua-list"><p>Click <em>Analyze User Agents</em> to run this report.</p></div>
+            <div class="p-5" id="ua"><p>Click <em>Analyze User Agents</em> to run this report.</p></div>
           </div>
         </div>
 
       </div>
-      <p style="text-align: right; font-size: small;" class="mr-5">
+      <p style="text-align: right; font-size: small;" class="mr-5 pt-4">
       <a href="https://github.com/sarahg/nginx-traffic-analyzer">
         <i class="fab fa-github"></i>
         View source on GitHub
