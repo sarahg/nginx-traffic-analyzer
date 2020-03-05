@@ -18,16 +18,28 @@ const runReport = type => {
   xmlhttp.onreadystatechange = function() {
     if (this.readyState === 4 && this.status === 200) {
       box.innerHTML = this.responseText;
+      updateIPBlockCode();
     } else {
       box.innerHTML = "Error :(";
     }
   };
+
 }
 
 /**
  * Update the "Block IPs" code snippet based on
  * values marked in the checkboxes.
- * 
- * @todo
  */
-const updateBlockArray = () => {}
+const updateIPBlockCode = () => {
+  const element = document.querySelectorAll("td.checkbox");
+  let selected = [];
+  element.forEach(function(el) {
+    el.addEventListener('click', ()=> {
+      console.log('click');
+      // @todo get values of all checked boxes
+      // add that to the PHP code snippet
+      // and show the code snippet box
+      // hide if no boxes checked
+    });
+  });
+}
