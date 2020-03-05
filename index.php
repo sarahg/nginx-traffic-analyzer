@@ -10,6 +10,7 @@
   <link rel="shortcut icon" href="favicon.ico" type="image/vnd.microsoft.icon">
   <style>
     td {word-break: break-all;}
+    #ua tr td:first-child {width: 60%;}
   </style>
 </head>
 
