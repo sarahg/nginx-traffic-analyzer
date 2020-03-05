@@ -6,12 +6,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
   <title>nginx traffic analyzer</title>
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
-    integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous" />
   <link href="https://unpkg.com/tailwindcss@next/dist/tailwind.min.css" rel="stylesheet" />
   <link rel="shortcut icon" href="favicon.ico" type="image/vnd.microsoft.icon">
   <style>
-    td {padding: .25em;}
+    td {word-break: break-all;}
   </style>
 </head>
 
@@ -20,7 +18,7 @@
     <div class="w-full container mx-auto flex flex-wrap items-center mt-0 pt-3 pb-3 md:pb-0">
       <div class="w-1/2 pl-2 md:pl-0 pb-2">
         <a class="text-gray-900 text-base xl:text-xl no-underline hover:no-underline font-bold" href="/">
-          <i class="fas fa-sun text-orange-600 pr-3"></i>
+          <i class="fas fa-cat text-orange-600 pr-2"></i>
           nginx traffic analyzer
         </a>
       </div>
@@ -100,7 +98,8 @@
     </div>
 
   </div>
-  <script src="app.js"></script>
+  <script src="js/app.js"></script>
+  <script src="https://kit.fontawesome.com/a67e1f8da5.js" crossorigin="anonymous"></script>
 </body>
 
 </html>

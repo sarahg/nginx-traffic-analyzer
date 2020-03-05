@@ -16,10 +16,26 @@ Fire up the app using your terminal:
 4. In a browser, open this page: http://localhost:8000
 
 Parse your logs:
-1. Move your nginx access logs into the "logs" directory of this repository. This app will run a combined report
- of all log files in this directory. If your site is on Pantheon, you can use `scripts/collect-pantheon-logs.sh` to retrieve your logs. 
+1. Download nginx access logs from your webserver(s).
+
+ If your site is on Pantheon, you can use `scripts/collect-pantheon-logs.sh` to retrieve your logs. 
  Add your site UUID to that script, then run it from the app directory: `./scripts/pantheon-collect-logs.sh`
-2. Hit the "Analyze IPs" and/or "Analyze User Agents" buttons to run reports.
+
+2. Move your nginx access logs into the "logs" directory of this repository. This app will run a combined report
+ of all log files in this directory. 
+
+3. Hit the "Analyze IPs" and/or "Analyze User Agents" buttons to run reports.
+
+Note: There are lots of different ways to format nginx logs. If your webserver uses a different
+format, you might have to adjust the search command arguments in the `reportAttributes()` function in 
+inc/analyze.php. This tool works with logs formatted like this:
+
+```
+time_combined '$remote_addr - $remote_user [$time_local]  '
+    '"$request" $status $body_bytes_sent '
+    '"$http_referer" "$http_user_agent" $request_time '
+    '"$http_x_forwarded_for"';
+```
 
 ## So what do I do with these results?
 

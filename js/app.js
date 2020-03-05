@@ -1,11 +1,15 @@
 "use strict";
 
-function runReport(type) {
+/**
+ * AJAX handler
+ * @param {string} type 
+ */
+const runReport = type => {
   let box = document.getElementById(type);
   let path = document.getElementById("path").value;
 
   var xmlhttp = new XMLHttpRequest();
-  xmlhttp.open("GET", "analyze.php?path=" + path + '&type=' + type);
+  xmlhttp.open("GET", "inc/analyze.php?path=" + path + '&type=' + type);
   xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
   xmlhttp.send();
 
@@ -19,3 +23,11 @@ function runReport(type) {
     }
   };
 }
+
+/**
+ * Update the "Block IPs" code snippet based on
+ * values marked in the checkboxes.
+ * 
+ * @todo
+ */
+const updateBlockArray = () => {}
