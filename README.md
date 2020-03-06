@@ -15,14 +15,14 @@ Fire up the app using your terminal:
 3. Start up your PHP webserver: `php -S localhost:8000`
 4. In a browser, open this page: http://localhost:8000
 
-Parse your logs:
+Retrieve your logs:
 1. Download nginx access logs from your webserver(s).
 
- If your site is on Pantheon, you can use `scripts/collect-pantheon-logs.sh` to retrieve your logs. 
- Add your site UUID to that script, then run it from the app directory: `./scripts/pantheon-collect-logs.sh`
-
 2. Move your nginx access logs into the "logs" directory of this repository. This app will run a combined report
- of all log files in this directory. 
+ of all log files in this directory.
+
+If your site is on Pantheon, you can use `misc/collect-pantheon-logs.sh` to retrieve your logs. 
+ Add your site UUID to that script, then run it from the app directory: `./misc/pantheon-collect-logs.sh`
 
 3. Hit the "Analyze IPs" and/or "Analyze User Agents" buttons to run reports.
 
@@ -40,14 +40,17 @@ time_combined '$remote_addr - $remote_user [$time_local]  '
 ## So what do I do with these results?
 
 ### IP addresses
-If you notice an IP driving a disproportionate or abnormal amount of traffic, you might want to block it. Before blocking it, you should check where it comes from -- you don't want to block something useful (e.g, GoogleBot). 
+If you notice an IP driving a disproportionate or abnormal amount of traffic, you might want to block it. Before blocking it, you should check where it comes from -- you don't want to block something useful (e.g, GoogleBot, or yourself). 
  
-There are lots of free tools for looking up IPs. I like [this one](https://dnschecker.org/ip-whois-lookup.php), or you can use the command-line: `whois 255.255.255.255`
+Click the "Lookup" link next to each IP to view [WHOIS](https://en.wikipedia.org/wiki/WHOIS) information for the IP.
 
 #### How to block IPs
-You can effectively block IPs at the application level with PHP code ([example](https://stackoverflow.com/a/14113264)). In Drupal, this code should go in `settings.php`; in WordPress, this should go in `wp-config.php` in order to execute before anything else.
+You can effectively block IPs at the application level with PHP code. In Drupal, this code should go in `settings.php`; in WordPress, this should go in `wp-config.php` in order to run before anything else.
 
-Drupal provides a module called [Ban](https://www.drupal.org/docs/8/core/modules/ban/overview) that can block IPs via the CMS as well, but blocking IPs with PHP code before the CMS bootstraps is significantly more performant. WordPress is similar -- there are certainly plugins for blocking IPs, but PHP code in `wp-config.php` will be less of a performance hit.
+You can create a code snippet for IP blocking by selecting IPs on the list, and a PHP code snippet will appear at the bottom of the column.
+ You can copy/paste this into your CMS settings file.
+
+Drupal provides a module called [Ban](https://www.drupal.org/docs/8/core/modules/ban/overview) that can block IPs entered into the admin interface, but blocking IPs with PHP code before the CMS bootstraps is significantly more performant. WordPress is similar -- there are certainly plugins for blocking IPs, but using PHP code in `wp-config.php` will be less of a performance hit.
 
 You can also block IPs using a CDN like Fastly or Cloudflare, or with a web application firewall (WAF).
 
