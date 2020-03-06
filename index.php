@@ -28,6 +28,7 @@
           nginx traffic analyzer
         </a>
       </div>
+      <div class="w-1/2 text-right pr-5"><a class="text-blue-500" href="inc/help.php"><i class="fas fa-question-circle pr-1"></i>Help</a></div>
     </div>
   </nav>
 

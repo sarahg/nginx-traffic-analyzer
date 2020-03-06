@@ -21,8 +21,10 @@ Retrieve your logs:
 2. Move your nginx access logs into the "logs" directory of this repository. This app will run a combined report
  of all log files in this directory.
 
-If your site is on Pantheon, you can use `misc/collect-pantheon-logs.sh` to retrieve your logs. 
- Add your site UUID to that script, then run it from the app directory: `./misc/pantheon-collect-logs.sh`
+_If your site is on Pantheon, you can use `misc/collect-pantheon-logs.sh` to retrieve your logs. 
+ Add your site UUID to that script, then run it from the app directory: `./misc/pantheon-collect-logs.sh`_
+ 
+_You can also download Pantheon logs [via SFTP](https://pantheon.io/docs/logs#access-logs-via-sftp)._
 
 3. Hit the "Analyze IPs" and/or "Analyze User Agents" buttons to run reports.
 
