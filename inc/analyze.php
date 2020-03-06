@@ -24,18 +24,16 @@ build($report);
 function build($report) {
   $str = shell_exec($report['command']);
   $results = preg_split("#[\r\n]+#", $str);
-  echo buildResultPanel($report, $results);
+  echo buildResultTable($report, $results);
 }
 
 /**
  * Create a table row for each IP/UA.
  */
 function buildTableRow($type, $result) {
-  
-  // Wrangle the result string into usable bits.
   $count = strtok($result, ' ');
   $visitor = trim(str_replace($count, '', $result));
-
+  // Build rows.
   if ($type == 'ip') {
     $row_data = [
       '<input type="checkbox" value="'. $visitor .'">',
@@ -48,11 +46,30 @@ function buildTableRow($type, $result) {
     $row_data = [
       $visitor,
       number_format($count),
-      checkRep($visitor)
+      checkUAType($visitor)
     ];
   }
-
   return $row_data;
+}
+
+/**
+ * Build a table of results from our parsing command.
+ * @param array $results
+ * @return string $markup
+ *   An HTML table of results (╯°□°)╯︵ ┻━┻
+ */
+function buildResultTable($report, $results) {
+  $markup = '<table>';
+  $markup .= '<thead><tr class="border"><th class="text-left px-2 py-2">'. implode('</th><th class="text-left px-4 py-2">', $report['header']) .'</tr></thead>';
+  foreach ($results as $result) {
+    if ($result) {
+      $markup .= '<tr class="border">';
+      $markup .= '<td class="text-left px-4 py-2">' . implode('</td><td class="text-left px-4 py-2">', buildTableRow($report['type'], $result));
+      $markup .= '</tr>';
+    }
+  }
+  $markup .= '</table>';
+  return $markup;
 }
 
 /**
@@ -60,7 +77,7 @@ function buildTableRow($type, $result) {
  * @param $agent string
  * @return string
  */
-function checkRep($agent) {
+function checkUAType($agent) {
   $icon = '🤷‍♀️';
   if (strpos($agent, BAD_USER_AGENTS)) {
     $icon = '👹'; // @todo this one isn't working
@@ -89,46 +106,4 @@ function reportAttributes($type) {
   ];
   $key = array_search($type, array_column($reports, 'type'));
   return $reports[$key];
-}
-
-/**
- * Build a table of results from our parsing command.
- * @param array $results
- * @return string $markup
- *   An HTML table of results (╯°□°)╯︵ ┻━┻
- *   and a dynamic IP blocking code snippet for the IP report.
- */
-function buildResultPanel($report, $results) {
-  $markup = '<table>';
-  $markup .= '<thead><tr class="border"><th class="text-left px-2 py-2">'. implode('</th><th class="text-left px-4 py-2">', $report['header']) .'</tr></thead>';
-  foreach ($results as $result) {
-    if ($result) {
-      $markup .= '<tr class="border">';
-      $markup .= '<td class="text-left px-4 py-2">' . implode('</td><td class="text-left px-4 py-2">', buildTableRow($report['type'], $result));
-      $markup .= '</tr>';
-    }
-  }
-  $markup .= '</table>';
-  if ($report['type'] == 'ip') {
-    $markup .= IPBlockCodeSnippet();
-  }
-  return $markup;
-}
-
-/**
- * Returns markup for the IP Block code snippet.
- */
-function IPBlockCodeSnippet() {
-  $markup  = '<div class="block-snippet mt-8">';
-  $markup .= '<h3 class="text-xl">Block IPs</h3>';
-  $markup .= '<p class="mt-1">Select IPs above to generate PHP code.</p>';
-  $markup .= '<pre class="invisible mt-3 border p-3">';
-  $markup .= '$deny = array(<span id="blockIPs"></span>);' . "\n";
-  $markup .= 'if (in_array ($_SERVER["REMOTE_ADDR"], $deny)) {' . "\n";
-  $markup .= '  die("Forbiden");' . "\n";
-  $markup .= '}';
-  $markup .= '</pre>';
-  //$markup .= '<p><a href="inc/help.php#what">What do I do with this?</a></p>'; //@todo build help.php
-  $markup .= '</div>';
-  return $markup;
 }

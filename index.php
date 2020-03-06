@@ -9,8 +9,13 @@
   <link href="https://unpkg.com/tailwindcss@next/dist/tailwind.min.css" rel="stylesheet" />
   <link rel="shortcut icon" href="favicon.ico" type="image/vnd.microsoft.icon">
   <style>
-    td {word-break: break-all;}
-    #ua tr td:first-child {width: 60%;}
+    td {
+      word-break: break-all;
+    }
+
+    #ua tr td:first-child {
+      width: 60%;
+    }
   </style>
 </head>
 
@@ -37,32 +42,29 @@
               <label class="block text-gray-700 text-sm font-bold mb-2" for="path">
                 Path to nginx access log(s)
               </label>
-              <input
-                style="opacity: 50%;"
+              <input style="opacity: 50%;"
                 class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 id="path" type="text" disabled value="<?php echo getcwd() . '/'; ?>logs" />
-                <!-- @todo ^ alert if this directory is empty -->
+              <!-- @todo ^ alert if this directory is empty -->
             </div>
             <div class="flex items-center justify-start">
               <button
                 class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mr-2 rounded focus:outline-none focus:shadow-outline"
-                type="button"
-                onclick="runReport('ip')">
+                type="button" onclick="runReport('ip')">
                 Analyze IPs
               </button>
               <button
                 class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mr-2 rounded focus:outline-none focus:shadow-outline"
-                type="button"
-                onclick="runReport('ua')">
+                type="button" onclick="runReport('ua')">
                 Analyze User Agents
               </button>
-              <button 
+              <button
                 class="bg-blue-400 hover:bg-blue-600 text-white font-bold py-2 px-4 mr-4 rounded focus:outline-none focus:shadow-outline"
-                type="button"
-                onClick="window.location.reload();">
+                type="button" onClick="window.location.reload();">
                 Reset
               </button>
-              <small>👆Eventually it'd be nice to make this user-configurable, but for now, put your logs here please.</small>
+              <small>👆Eventually it'd be nice to make this user-configurable, but for now, put your logs here
+                please.</small>
             </div>
           </form>
         </div>
@@ -73,7 +75,18 @@
             <div class="border-b p-3">
               <h5 class="font-bold uppercase text-gray-600">Top IPs</h5>
             </div>
-            <div class="p-5" id="ip"><p>Click <em>Analyze IPs</em> to run this report.</p></div>
+            <div class="p-5">
+              <div id="ip">
+                <p>Click <em>Analyze IPs</em> to run this report.</p>
+              </div>
+              <div id="blockBox" class="mt-8 hidden">
+                <h3 class="text-xl">Block IPs</h3>
+                <p class="mt-1">Select IPs above to generate PHP code. <a class="text-blue-500" href="inc/help.php" target="_blank">What do I do with this?</a></p>
+                <pre
+                  class="mt-3 border p-3 invisible">$deny = array(<span id="blockIPs"></span>);<br>if (in_array($_SERVER["REMOTE_ADDR"], $deny)) {<br>&nbsp;&nbsp;die("Forbidden");<br>}
+                </pre>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -85,17 +98,19 @@
                 Top User Agents
               </h5>
             </div>
-            <div class="p-5" id="ua"><p>Click <em>Analyze User Agents</em> to run this report.</p></div>
+            <div class="p-5" id="ua">
+              <p>Click <em>Analyze User Agents</em> to run this report.</p>
+            </div>
           </div>
         </div>
 
       </div>
       <p style="text-align: right; font-size: small;" class="mr-5 pt-4">
-      <a href="https://github.com/sarahg/nginx-traffic-analyzer">
-        <i class="fab fa-github"></i>
-        View source on GitHub
-      </a>
-    </p>
+        <a href="https://github.com/sarahg/nginx-traffic-analyzer">
+          <i class="fab fa-github"></i>
+          View source on GitHub
+        </a>
+      </p>
     </div>
 
   </div>

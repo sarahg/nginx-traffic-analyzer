@@ -7,7 +7,7 @@
 # Add that site UUID to line 10 (see line 9 as an example).
 
 # SITE_UUID=12345678-1234-1234-abcd-0123456789ab
-SITE_UUID=d29edec2-eb9a-40e2-8519-3afe3b32c0d7
+SITE_UUID=
 ENV=live
 for app_server in `dig +short appserver.$ENV.$SITE_UUID.drush.in`;
 do

@@ -18,12 +18,14 @@ const runReport = type => {
   xmlhttp.onreadystatechange = function() {
     if (this.readyState === 4 && this.status === 200) {
       box.innerHTML = this.responseText;
-      updateIPBlockCode(); // start listening for checkbox clicks
+      if (type == 'ip') {
+        document.getElementById('blockBox').classList.remove('hidden');
+        updateIPBlockCode();
+      }
     } else {
       box.innerHTML = "Error :(";
     }
   };
-
 }
 
 /**
