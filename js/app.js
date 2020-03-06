@@ -21,6 +21,7 @@ const runReport = type => {
       if (type == 'ip') {
         document.getElementById('blockBox').classList.remove('hidden');
         updateIPBlockCode();
+        new ClipboardJS('.copy');
       }
     } else {
       box.innerHTML = "Error :(";
@@ -38,10 +39,10 @@ const updateIPBlockCode = () => {
       let selected = [];
       let boxes = document.querySelectorAll(':checked');
       boxes.forEach(function(box) {
-        selected.push('"' + box.value + '"');
+        selected.push('&nbsp;&nbsp;"' + box.value + '"');
       });
-      document.getElementById('blockIPs').innerHTML = selected.toString();
-      document.querySelector('pre').classList.toggle('invisible', !boxes.length);
+      document.getElementById('blockIPs').innerHTML = '\n' + selected.join(', \n') + '<br>';
+      document.querySelector('.codeblock').classList.toggle('invisible', !boxes.length);
     });
   });
 }

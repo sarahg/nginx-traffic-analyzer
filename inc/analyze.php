@@ -1,55 +1,22 @@
 <?php
 
-// Load static attributes for this report. 
-// Bail if we can't find any.
-$report = reportAttributes($_GET['type']);
-if (!is_array($report)) {
-  echo('Error :(');
-}
-
-// Load the Bad User Agents list if needed.
-if ($report['type'] == 'ua') {
-  define('BAD_USER_AGENTS', file_get_contents('../misc/bad-user-agents.list'));
-}
-
-// Build the report.
-build($report);
+init();
 
 /**
- * Parse our logs and output HTML.
- * @param $report Array of report attributes
- * @return void
- *   Echos HTML back to index.php.
+ * Set up and build the report.
+ * Echos HTML back to index.php via app.js.
  */
-function build($report) {
-  $str = shell_exec($report['command']);
-  $results = preg_split("#[\r\n]+#", $str);
+function init() {
+  $report = getReportAttributes($_GET['type']);
+  if (!is_array($report)) {
+    die('Error :('); // not a valid report type
+  }
+  if ($report['type'] == 'ua') {
+    define('BAD_USER_AGENTS', file_get_contents('../misc/bad-user-agents.list'));
+  }
+  // Run our designated command on the log files and push that out into an array.
+  $results = preg_split("#[\r\n]+#", shell_exec($report['command']));
   echo buildResultTable($report, $results);
-}
-
-/**
- * Create a table row for each IP/UA.
- */
-function buildTableRow($type, $result) {
-  $count = strtok($result, ' ');
-  $visitor = trim(str_replace($count, '', $result));
-  // Build rows.
-  if ($type == 'ip') {
-    $row_data = [
-      '<input type="checkbox" value="'. $visitor .'">',
-      $visitor,
-      number_format($count),
-      '<a class="text-blue-500" href="inc/whois.php?ip=' . $visitor . '" target="_blank">Lookup</a>',
-    ];
-  }
-  elseif ($type == 'ua') {
-    $row_data = [
-      $visitor,
-      number_format($count),
-      checkUAType($visitor)
-    ];
-  }
-  return $row_data;
 }
 
 /**
@@ -58,7 +25,7 @@ function buildTableRow($type, $result) {
  * @return string $markup
  *   An HTML table of results (╯°□°)╯︵ ┻━┻
  */
-function buildResultTable($report, $results) {
+function buildResultTable(array $report, array $results) {
   $markup = '<table>';
   $markup .= '<thead><tr class="border"><th class="text-left px-2 py-2">'. implode('</th><th class="text-left px-4 py-2">', $report['header']) .'</tr></thead>';
   foreach ($results as $result) {
@@ -73,11 +40,36 @@ function buildResultTable($report, $results) {
 }
 
 /**
+ * Create a table row for each IP/UA.
+ * @param string $type
+ * @param string $result
+ * @return array
+ *   Presentable data for each column in the row.
+ */
+function buildTableRow(string $type, string $result) {
+  $count = strtok($result, ' ');
+  $visitor = trim(str_replace($count, '', $result));
+
+  if ($type == 'ip') {
+    $row_data = [
+      '<input type="checkbox" value="'. $visitor .'">',
+      $visitor, number_format($count),
+      '<a class="text-blue-500" href="inc/whois.php?ip=' . $visitor . '" target="_blank">Lookup</a>',
+    ];
+  }
+  elseif ($type == 'ua') {
+    $row_data = [$visitor, number_format($count), checkUAType($visitor)];
+  }
+  return $row_data;
+}
+
+/**
  * How do we feel about this user agent?
- * @param $agent string
+ * 
+ * @param string $agent 
  * @return string
  */
-function checkUAType($agent) {
+function checkUAType(string $agent) {
   $icon = '🤷‍♀️';
   if (strpos($agent, BAD_USER_AGENTS)) {
     $icon = '👹'; // @todo this one isn't working
@@ -89,9 +81,13 @@ function checkUAType($agent) {
 }
 
 /**
- * Static attributes for each report type.
+ * Get static attributes for each report type.
+ * 
+ * @param $type string
+ *   The report type (ip or ua).
+ * @return array
  */
-function reportAttributes($type) {
+function getReportAttributes(string $type) {
   $reports = [
     [
       'type' => 'ip',

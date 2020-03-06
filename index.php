@@ -12,10 +12,10 @@
     td {
       word-break: break-all;
     }
-
     #ua tr td:first-child {
       width: 60%;
     }
+    .indent {left: 1em;}
   </style>
 </head>
 
@@ -82,9 +82,11 @@
               <div id="blockBox" class="mt-8 hidden">
                 <h3 class="text-xl">Block IPs</h3>
                 <p class="mt-1">Select IPs above to generate PHP code. <a class="text-blue-500" href="inc/help.php" target="_blank">What do I do with this?</a></p>
-                <pre
-                  class="mt-3 border p-3 invisible">$deny = array(<span id="blockIPs"></span>);<br>if (in_array($_SERVER["REMOTE_ADDR"], $deny)) {<br>&nbsp;&nbsp;die("Forbidden");<br>}
-                </pre>
+                <div class="codeblock invisible">
+                  <pre
+                    class="mt-3 border p-3">$deny = array(<span id="blockIPs"></span>);<br>if (in_array($_SERVER["REMOTE_ADDR"], $deny)) {<br>&nbsp;&nbsp;die("Forbidden");<br>}</pre>
+                  <small class="copy cursor-pointer text-blue-500" data-clipboard-target="pre"><i class="fas fa-copy pr-2"></i>Copy to clipboard</small>
+                </div>
               </div>
             </div>
           </div>
@@ -114,6 +116,7 @@
     </div>
 
   </div>
+  <script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
   <script src="js/app.js"></script>
   <script src="https://kit.fontawesome.com/a67e1f8da5.js" crossorigin="anonymous"></script>
 </body>
